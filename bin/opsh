@@ -15,7 +15,7 @@ fi
 OPSHROOTDIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )"/.. &> /dev/null && pwd )
 
 # shellcheck disable=SC1091
-source "$OPSHROOTDIR/lib/common.bash"
+source "$OPSHROOTDIR/share/opsh/common.bash"
 
 if [[ $# -lt 1 ]] ; then
     log::fatal "$0 requires a single argument of the script to run!"

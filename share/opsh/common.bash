@@ -76,7 +76,7 @@ log::fatal() {
 lib::import () {
     local libfile
     for libname in "$@" ; do
-	libfile="$OPSHROOTDIR/lib/$libname.bash"
+	libfile="$OPSHROOTDIR/share/opsh/$libname.bash"
 	[[ -f $libfile ]] || log::fatal "library '$libname' not found!"
 
 	# shellcheck disable=SC1090

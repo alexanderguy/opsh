@@ -5,12 +5,12 @@ INSTALLDIR	=	${DESTDIR}${PREFIX}
 all:
 
 lint:
-	shellcheck -x lib/*.bash bin/opsh
+	shellcheck -x share/opsh/*.bash bin/opsh
 
 install:
-	for i in bin lib ; do mkdir -p ${INSTALLDIR}/$$i ; done
+	for i in bin share ; do mkdir -p ${INSTALLDIR}/$$i ; done
 	cp bin/opsh ${INSTALLDIR}/bin/.
-	cp lib/* ${INSTALLDIR}/lib/.
+	cp -r share/* ${INSTALLDIR}/share/.
 
 clean:
 
