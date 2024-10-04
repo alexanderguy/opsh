@@ -1,0 +1,35 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+if [ -z "$BASH_VERSION" ]; then
+    echo "FATAL: This library requires bash to function properly!"
+    exit 1
+fi
+
+if [[ ${BASH_VERSINFO[0]} -lt 4 ]]; then
+    echo "FATAL: This library requires bash v4 or greater!"
+    exit 1
+fi
+
+OPSHROOTDIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )"/.. &> /dev/null && pwd )
+
+# shellcheck disable=SC1091
+source "$OPSHROOTDIR/lib/common.bash"
+
+if [[ $# -lt 1 ]] ; then
+    log::fatal "$0 requires a single argument of the script to run!"
+fi
+
+if [[ $# -gt 1 ]] ; then
+    log::fatal "$0 can only run one script at a time!"
+fi
+
+SCRIPTFILE="$1"
+[[ -f $SCRIPTFILE ]] || log::fatal "$0 can only run normal files that exist!"
+
+# shellcheck disable=SC2034
+SCRIPTDIR=$( dirname -- "$SCRIPTFILE")
+
+# shellcheck disable=SC1090
+source "$SCRIPTFILE"
