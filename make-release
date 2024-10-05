@@ -1,0 +1,20 @@
+#!/usr/bin/env opsh
+
+RUNDIR=$PWD
+
+lib::import git
+
+VERSION=$(git::repo::version)
+RELEASENAME="opsh-$VERSION"
+ARCHIVENAME="$RELEASENAME.tar.gz"
+RELEASEDIR="$TMPDIR/$RELEASENAME"
+
+mkdir -p "$RELEASEDIR"
+
+log::info "installing to $RELEASENAME..."
+make DESTDIR="$RELEASEDIR" PREFIX="" install
+
+log::info "makeing archive $ARCHIVENAME..."
+(cd "$TMPDIR" && tar cvzf "$RUNDIR/$ARCHIVENAME" "$RELEASENAME")
+
+log::info "done making release"
