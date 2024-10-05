@@ -5,7 +5,7 @@ INSTALLDIR	=	${DESTDIR}${PREFIX}
 all:
 
 lint:
-	shellcheck -x share/opsh/*.bash bin/opsh
+	shellcheck -s bash -x share/opsh/*.bash bin/opsh
 
 install:
 	for i in bin share ; do mkdir -p ${INSTALLDIR}/$$i ; done
