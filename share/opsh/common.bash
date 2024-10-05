@@ -28,6 +28,11 @@ temp::file () {
     mktemp -p "$TMPDIR" "$@"
 }
 
+# shellcheck disable=SC2120 # these options are optional.
+temp::dir () {
+    mktemp -d -p "$TMPDIR" "$@"
+}
+
 CRED=''
 CGRN=''
 CYEL=''
