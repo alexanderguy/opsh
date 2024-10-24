@@ -27,5 +27,6 @@ SCRIPTFILE="$1" ; shift
 # shellcheck disable=SC2034
 SCRIPTDIR=$( dirname -- "$SCRIPTFILE")
 
+BASH_ARGV0=$SCRIPTFILE
 # shellcheck disable=SC1090
 source "$SCRIPTFILE"
