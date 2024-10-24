@@ -1,0 +1,8 @@
+invoke-and-check-output () {
+    local outfile
+    outfile=$(temp::file)
+
+    "$@" > "$outfile"
+
+    diff -u <(cat) "$outfile"
+}
