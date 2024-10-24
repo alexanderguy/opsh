@@ -1,0 +1,9 @@
+#!/usr/bin/env opsh
+
+echo "$0"
+
+echo "Hey, You, Guys!"
+
+for i in "$@" ; do
+    echo "$i"
+done
