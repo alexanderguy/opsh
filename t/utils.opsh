@@ -4,5 +4,5 @@ invoke-and-check-output () {
 
     "$@" > "$outfile"
 
-    diff -u <(cat) "$outfile"
+    diff -u - "$outfile"
 }
