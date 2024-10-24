@@ -21,11 +21,7 @@ if [[ $# -lt 1 ]] ; then
     log::fatal "$0 requires a single argument of the script to run!"
 fi
 
-if [[ $# -gt 1 ]] ; then
-    log::fatal "$0 can only run one script at a time!"
-fi
-
-SCRIPTFILE="$1"
+SCRIPTFILE="$1" ; shift
 [[ -f $SCRIPTFILE ]] || log::fatal "$0 can only run normal files that exist!"
 
 # shellcheck disable=SC2034
