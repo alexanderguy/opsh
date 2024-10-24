@@ -7,6 +7,9 @@ all:
 lint:
 	shellcheck -s bash -x share/opsh/*.bash bin/opsh make-release
 
+test:
+	PATH=$$PWD/bin:$$PATH prove
+
 install:
 	for i in bin share ; do mkdir -p ${INSTALLDIR}/$$i ; done
 	cp bin/opsh ${INSTALLDIR}/bin/.
