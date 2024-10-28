@@ -10,6 +10,8 @@ lint:
 test:
 	PATH=$$PWD/bin:$$PATH prove
 
+check: lint test
+
 install:
 	for i in bin share ; do mkdir -p ${INSTALLDIR}/$$i ; done
 	cp bin/opsh ${INSTALLDIR}/bin/.
