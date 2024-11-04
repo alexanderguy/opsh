@@ -1,0 +1,19 @@
+#!/usr/bin/env opsh
+
+A () {
+    echo A
+}
+
+exit::trigger A
+
+print-args () {
+    echo "$@"
+}
+
+C () {
+    echo C
+}
+
+exit::trigger C
+
+exit::trigger print-args B

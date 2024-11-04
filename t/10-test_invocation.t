@@ -18,4 +18,14 @@ EOF
 
 testing::register basic-opsh-invocation "do some basic checks that args are passed in"
 
+check-exit-triggers () {
+    invoke-and-check-output "$SCRIPTDIR/10-test_invocation/exit-trigger" <<EOF
+B
+C
+A
+EOF
+}
+
+testing::register check-exit-triggers "verify that the exit triggers run properly"
+
 testing::run
