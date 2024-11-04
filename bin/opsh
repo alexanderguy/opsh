@@ -12,20 +12,21 @@ if [[ ${BASH_VERSINFO[0]} -lt 4 ]]; then
     exit 1
 fi
 
-OPSHROOTDIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )"/.. &> /dev/null && pwd )
+OPSHROOTDIR=$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")"/.. &>/dev/null && pwd)
 
 # shellcheck disable=SC1091
 source "$OPSHROOTDIR/share/opsh/common.bash"
 
-if [[ $# -lt 1 ]] ; then
+if [[ $# -lt 1 ]]; then
     log::fatal "$0 requires a single argument of the script to run!"
 fi
 
-SCRIPTFILE="$1" ; shift
+SCRIPTFILE="$1"
+shift
 [[ -f $SCRIPTFILE ]] || log::fatal "$0 can only run normal files that exist!"
 
 # shellcheck disable=SC2034
-SCRIPTDIR=$( dirname -- "$SCRIPTFILE")
+SCRIPTDIR=$(dirname -- "$SCRIPTFILE")
 
 BASH_ARGV0=$SCRIPTFILE
 # shellcheck disable=SC1090

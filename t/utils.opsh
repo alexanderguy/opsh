@@ -1,8 +1,8 @@
-invoke-and-check-output () {
+invoke-and-check-output() {
     local outfile
     outfile=$(temp::file)
 
-    "$@" > "$outfile"
+    "$@" >"$outfile"
 
     diff -u - "$outfile"
 }
