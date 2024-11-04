@@ -1,3 +1,4 @@
+_OPSH_LIB_BUNDLED=()
 EXIT_FUNCS=()
 
 exit::trap () {
@@ -78,9 +79,26 @@ log::fatal () {
     exit 1
 }
 
+lib::import::is-bundled () {
+    local libfile i
+    libfile=$1 ; shift
+
+    for i in "${_OPSH_LIB_BUNDLED[@]}" ; do
+	if [[ $libfile == "$i" ]] ; then
+	    return 0
+	fi
+    done
+
+    return 1
+}
+
 lib::import () {
     local libfile
     for libname in "$@" ; do
+	if lib::import::is-bundled "$libname" ; then
+	    continue
+	fi
+
 	libfile="$OPSHROOTDIR/share/opsh/$libname.bash"
 	[[ -f $libfile ]] || log::fatal "library '$libname' not found!"
 
