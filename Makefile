@@ -1,11 +1,12 @@
 PREFIX		?=	/usr/local
 INSTALLDIR	=	${DESTDIR}${PREFIX}
 
+ALL_SCRIPTS	=	share/opsh/*.bash bin/opsh make-release t/*.{t,opsh}
 
 all:
 
 lint:
-	shellcheck -P SCRIPTDIR -s bash -x share/opsh/*.bash bin/opsh make-release t/*.{t,opsh}
+	shellcheck -P SCRIPTDIR -s bash -x ${ALL_SCRIPTS}
 
 test:
 	PATH=$$PWD/bin:$$PATH prove -v
