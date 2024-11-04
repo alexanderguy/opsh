@@ -8,7 +8,7 @@ lint:
 	shellcheck -P SCRIPTDIR -s bash -x share/opsh/*.bash bin/opsh make-release t/*.{t,opsh}
 
 test:
-	PATH=$$PWD/bin:$$PATH prove
+	PATH=$$PWD/bin:$$PATH prove -v
 
 check: lint test
 
