@@ -1,9 +1,9 @@
 EXIT_FUNCS=()
 
 exit::trap () {
-    local func
-    for func in "${EXIT_FUNCS[@]}"; do
-	$func
+    local i
+    for ((i = ${#EXIT_FUNCS[@]} - 1 ; i >= 0 ; i--)) ; do
+	${EXIT_FUNCS[$i]}
     done
 }
 
