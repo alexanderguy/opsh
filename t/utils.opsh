@@ -6,3 +6,13 @@ invoke-and-check-output() {
 
     diff -u - "$outfile"
 }
+
+eval-and-check-status() {
+    local expected=$1
+    shift
+
+    local ret=0
+    eval "$@" || ret=$?
+
+    [[ $ret -eq $expected ]] || testing::fail "expected a return status of $expected got $ret!"
+}
