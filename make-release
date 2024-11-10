@@ -14,7 +14,7 @@ mkdir -p "$RELEASEDIR"
 log::info "installing to $RELEASENAME..."
 make DESTDIR="$RELEASEDIR" PREFIX="" install
 
-log::info "makeing archive $ARCHIVENAME..."
+log::info "making archive $ARCHIVENAME..."
 (cd "$TMPDIR" && tar cvzf "$RUNDIR/$ARCHIVENAME" "$RELEASENAME")
 
 log::info "done making release"
