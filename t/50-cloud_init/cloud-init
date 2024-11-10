@@ -1,0 +1,5 @@
+#!/usr/bin/env opsh
+
+: "${_OPSH_MOCK_CLOUD_INIT_STATUS:=0}"
+
+exit "$_OPSH_MOCK_CLOUD_INIT_STATUS"
