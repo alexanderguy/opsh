@@ -49,3 +49,7 @@ testing::run() {
         n=$((n + 1))
     done
 }
+
+testing::fail() {
+    log::fatal "$*"
+}
