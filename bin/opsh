@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
 
+#- SECTION 00-header
 set -euo pipefail
 
 if [ -z "$BASH_VERSION" ]; then
@@ -14,9 +15,11 @@ fi
 
 OPSHROOTDIR=$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")"/.. &>/dev/null && pwd)
 
+#- SECTION 10-library
 # shellcheck disable=SC1091
 source "$OPSHROOTDIR/share/opsh/common.bash"
 
+#- SECTION 20-command
 if [[ $# -lt 1 ]]; then
     log::fatal "$0 requires a single argument of the script to run!"
 fi
@@ -31,3 +34,4 @@ SCRIPTDIR=$(dirname -- "$SCRIPTFILE")
 BASH_ARGV0=$SCRIPTFILE
 # shellcheck disable=SC1090
 source "$SCRIPTFILE"
+#- SECTION 30-end
