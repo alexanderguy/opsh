@@ -1,0 +1,49 @@
+#!/usr/bin/env opsh
+
+[[ $# -eq 1 ]] || log::fatal "usage: $0 <release-file>"
+
+RUNDIR=$PWD
+
+ARCHIVEPATH=$(realpath "$1")
+shift
+ARCHIVENAME=$(basename "$ARCHIVEPATH")
+
+TMPDIR=$(temp::dir)
+log::info "building files inside $TMPDIR..."
+cd "$TMPDIR" || log::fatal "failed to change into $TMPDIR!"
+
+log::info "extracting archive $ARCHIVEPATH..."
+tar xvzf "$ARCHIVEPATH"
+cd "${ARCHIVENAME%.tar.gz}" || log::fatal "failed to change into extracted archive directory!"
+
+EXPECTED_SECTIONS=4
+FOUND_SECTIONS=$(grep -c "#- SECTION" bin/opsh)
+[[ $FOUND_SECTIONS -eq $EXPECTED_SECTIONS ]] || log::fatal "expected $EXPECTED_SECTIONS but found $FOUND_SECTIONS!"
+
+csplit -s bin/opsh '/^#- SECTION .*/' "{$((EXPECTED_SECTIONS - 1))}"
+cat xx00 xx01 >opsh
+cat share/opsh/common.bash >>opsh
+
+for lib in share/opsh/*.bash; do
+    if [[ $lib == share/opsh/common.bash ]]; then
+        continue
+    fi
+
+    LIBFILE=$(basename "$lib")
+    echo "_OPSH_LIB_BUNDLED+=(${LIBFILE%.bash})" >>opsh
+done
+
+for lib in share/opsh/*.bash; do
+    if [[ $lib == share/opsh/common.bash ]]; then
+        continue
+    fi
+
+    cat "$lib" >>opsh
+done
+
+cat xx03 xx04 >>opsh
+
+chmod 755 opsh
+
+log::info "moving opsh to $RUNDIR..."
+mv opsh "$RUNDIR"

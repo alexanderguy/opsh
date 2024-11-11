@@ -1,7 +1,7 @@
 PREFIX		?=	/usr/local
 INSTALLDIR	=	${DESTDIR}${PREFIX}
 
-ALL_SCRIPTS	=	share/opsh/*.bash bin/opsh make-release t/*.{t,opsh}
+ALL_SCRIPTS	=	share/opsh/*.bash bin/opsh make-release make-single-file t/*.{t,opsh}
 
 SHFMTFLAGS	=	-i 4
 all:
