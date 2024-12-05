@@ -12,7 +12,7 @@ eval-and-check-status() {
     shift
 
     local ret=0
-    eval "$@" || ret=$?
+    eval "$*" || ret=$?
 
     [[ $ret -eq $expected ]] || testing::fail "expected a return status of $expected got $ret!"
 }
