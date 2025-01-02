@@ -100,7 +100,7 @@ lib::import() {
             continue
         fi
 
-        libfile="$OPSHROOTDIR/share/opsh/$libname.bash"
+        libfile="$OPSHROOTDIR/share/opsh/$libname.opsh"
         [[ -f $libfile ]] || log::fatal "library '$libname' not found!"
 
         # shellcheck disable=SC1090
