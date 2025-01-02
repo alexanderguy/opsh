@@ -88,4 +88,32 @@ bad-ver-parsing() {
 
 testing::register bad-ver-parsing "check to make sure semver parsing fails as expected"
 
+basic-bump() {
+    local old new
+
+    old=v1.2.3
+    new=$(semver::bump major "$old")
+
+    [[ "$new" = "v2.0.0" ]] || testing::fail
+    semver::test "$new" -eq v2.0.0 || testing::fail
+
+    old=V0.0.22
+    new=$(semver::bump minor "$old")
+    [[ "$new" = "V0.1.0" ]] || testing::fail
+    semver::test "$new" -eq v0.1.0 || testing::fail
+
+    old=2.5.9
+    new=$(semver::bump patch "$old")
+    [[ "$new" = "2.5.10" ]] || testing::fail
+    semver::test "$new" -eq v2.5.10 || testing::fail
+
+    if new=$(semver::bump nonsense "6.2.0"); then
+        testing::fail
+    fi
+
+    [[ -z "$new" ]] || testing::fail
+}
+
+testing::register basic-bump "check that bumping semvers works"
+
 testing::run
