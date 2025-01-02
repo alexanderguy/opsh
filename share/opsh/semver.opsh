@@ -69,3 +69,46 @@ semver::test() {
 
     return "$ret"
 }
+
+semver::bump() {
+    local -l pos=$1
+    shift
+
+    local ver=$1
+    shift
+
+    local prefix=""
+
+    if [[ "$ver" =~ ^([vV]) ]]; then
+        prefix="${BASH_REMATCH[0]}"
+    fi
+
+    semver::parse "$ver"
+
+    local idx count
+
+    count=${#OPSH_SEMVER[@]}
+
+    case "$pos" in
+    major)
+        idx=0
+        ;;
+    minor)
+        idx=1
+        ;;
+    patch)
+        idx=2
+        ;;
+    *)
+        return 1
+        ;;
+    esac
+
+    OPSH_SEMVER[idx]=$((OPSH_SEMVER[idx] + 1))
+
+    for ((idx = idx + 1; idx < count; idx++)); do
+        OPSH_SEMVER[idx]=0
+    done
+
+    echo "$prefix$(array::join . "${OPSH_SEMVER[@]}")"
+}
