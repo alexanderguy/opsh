@@ -43,7 +43,7 @@ CNONE=''
 if [[ -t 1 ]]; then
     CRED='\033[0;31m'
     CGRN='\033[0;32m'
-    CYEL='\033[0;32m'
+    CYEL='\033[0;33m'
     CBLU='\033[0;34m'
     CNONE='\033[0m'
 fi
