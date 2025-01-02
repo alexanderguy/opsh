@@ -1,0 +1,71 @@
+_OPSH_SEMVER_NUM='0|[1-9][0-9]*'
+_OPSH_SEMVER_REGEX="^[vV]?($_OPSH_SEMVER_NUM)\\.($_OPSH_SEMVER_NUM)\\.($_OPSH_SEMVER_NUM)\$"
+
+OPSH_SEMVER=()
+
+semver::parse() {
+    local ver=$1
+    shift
+
+    # shellcheck disable=SC2319
+    [[ "$ver" =~ $_OPSH_SEMVER_REGEX ]] || return "$?"
+
+    OPSH_SEMVER=("${BASH_REMATCH[@]:1}")
+}
+
+# Note: This is a very naive version of a semver test.  It can be
+# extended in future to support a full set of expressions.
+
+semver::_op-eval() {
+    local -n l=$1
+    shift
+    local op=$1
+    shift
+    local -n r=$1
+    shift
+
+    for i in {0..2}; do
+        eval "[[ ${l[$i]} $op ${r[$i]} ]] || return 1"
+    done
+}
+
+semver::test() {
+    local rawleft=$1
+    shift
+    local op=$1
+    shift
+    local rawright=$1
+    shift
+
+    [[ $# -eq 0 ]] || return 1
+
+    semver::parse "$rawleft" || return 1
+    # shellcheck disable=SC2034
+    local left=("${OPSH_SEMVER[@]}")
+
+    semver::parse "$rawright" || return 1
+    # shellcheck disable=SC2034
+    local right=("${OPSH_SEMVER[@]}")
+
+    local ret
+
+    case "$op" in
+    -eq | -ge | -le)
+        ret=0
+        semver::_op-eval left "$op" right || ret=1
+        ;;
+    -lt)
+        ret=1
+        semver::_op-eval left -ge right || ret=0
+        ;;
+    -gt)
+        ret=1
+        semver::_op-eval left -le right || ret=0
+        ;;
+    *)
+        log::fatal "unknown semver expression comparison operator '$op'!"
+        ;;
+    esac
+
+    return "$ret"
+}
