@@ -107,3 +107,9 @@ lib::import() {
         source "$libfile"
     done
 }
+
+array::join() {
+    local IFS=$1
+    shift
+    echo "$*"
+}
