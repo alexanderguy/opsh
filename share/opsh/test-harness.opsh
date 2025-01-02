@@ -51,5 +51,11 @@ testing::run() {
 }
 
 testing::fail() {
-    log::fatal "$*"
+    local msg=""
+
+    if [[ $# -gt 0 ]]; then
+        msg=": $*"
+    fi
+
+    log::fatal "${BASH_SOURCE[1]}:${BASH_LINENO[0]} inside ${FUNCNAME[1]}${msg}"
 }
