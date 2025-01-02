@@ -17,7 +17,7 @@ OPSHROOTDIR=$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")"/.. &>/dev/null && pwd)
 
 #- SECTION 10-library
 # shellcheck disable=SC1091
-source "$OPSHROOTDIR/share/opsh/common.bash"
+source "$OPSHROOTDIR/share/opsh/common.opsh"
 
 #- SECTION 20-command
 if [[ $# -lt 1 ]]; then

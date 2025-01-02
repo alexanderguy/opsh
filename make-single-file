@@ -22,19 +22,19 @@ FOUND_SECTIONS=$(grep -c "#- SECTION" bin/opsh)
 
 csplit -s bin/opsh '/^#- SECTION .*/' "{$((EXPECTED_SECTIONS - 1))}"
 cat xx00 xx01 >opsh
-cat share/opsh/common.bash >>opsh
+cat share/opsh/common.opsh >>opsh
 
-for lib in share/opsh/*.bash; do
-    if [[ $lib == share/opsh/common.bash ]]; then
+for lib in share/opsh/*.opsh; do
+    if [[ $lib == share/opsh/common.opsh ]]; then
         continue
     fi
 
     LIBFILE=$(basename "$lib")
-    echo "_OPSH_LIB_BUNDLED+=(${LIBFILE%.bash})" >>opsh
+    echo "_OPSH_LIB_BUNDLED+=(${LIBFILE%.opsh})" >>opsh
 done
 
-for lib in share/opsh/*.bash; do
-    if [[ $lib == share/opsh/common.bash ]]; then
+for lib in share/opsh/*.opsh; do
+    if [[ $lib == share/opsh/common.opsh ]]; then
         continue
     fi
 
