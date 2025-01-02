@@ -1,0 +1,69 @@
+_OPSH_SEMVER_NUM='0|[1-9][0-9]*'
+_OPSH_SEMVER_REGEX="^[vV]?($_OPSH_SEMVER_NUM)\\.($_OPSH_SEMVER_NUM)\\.($_OPSH_SEMVER_NUM)\$"
+
+OPSH_SEMVER=()
+
+semver::parse() {
+    local ver=$1
+    shift
+
+    # shellcheck disable=SC2319
+    [[ "$ver" =~ $_OPSH_SEMVER_REGEX ]] || return "$?"
+
+    OPSH_SEMVER=("${BASH_REMATCH[@]:1}")
+}
+
+# Note: This is a very naive version of a semver test.  It can be
+# extended in future to support a full set of expressions.
+
+semver::test() {
+    semver::parse "$1" || return 1
+    # shellcheck disable=SC2034
+    local left=("${OPSH_SEMVER[@]}")
+    shift
+
+    local op=$1
+    shift
+
+    semver::parse "$1" || return 1
+    # shellcheck disable=SC2034
+    local right=("${OPSH_SEMVER[@]}")
+    shift
+
+    [[ $# -eq 0 ]] || return 1
+
+    local gtret ltret eqret
+
+    case "$op" in
+    -eq)
+        gtret=1 ltret=1 eqret=0
+        ;;
+    -gt)
+        gtret=0 ltret=1 eqret=1
+        ;;
+    -lt)
+        gtret=1 ltret=0 eqret=1
+        ;;
+    -ge)
+        gtret=0 ltret=1 eqret=0
+        ;;
+    -le)
+        gtret=1 ltret=0 eqret=0
+        ;;
+    *)
+        log::fatal "unknown semver expression comparison operator '$op'!"
+        ;;
+    esac
+
+    for i in {0..2}; do
+        if [[ ${left[$i]} -gt ${right[$i]} ]]; then
+            return $gtret
+        fi
+        if [[ ${left[$i]} -lt ${right[$i]} ]]; then
+            return $ltret
+        fi
+    done
+
+    return $eqret
+
+}
