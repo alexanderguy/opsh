@@ -116,6 +116,11 @@ array::join() {
 }
 
 opsh::version() {
+    if [[ -v _OPSH_VERSION ]]; then
+        echo "$_OPSH_VERSION"
+        return 0
+    fi
+
     lib::import git
 
     git::repo::version
