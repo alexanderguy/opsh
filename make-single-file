@@ -30,7 +30,7 @@ for lib in share/opsh/*.opsh; do
     fi
 
     LIBFILE=$(basename "$lib")
-    echo "_OPSH_LIB_BUNDLED+=(${LIBFILE%.opsh})" >>opsh
+    echo "_OPSH_LIB_IMPORTED+=(${LIBFILE%.opsh})" >>opsh
 done
 
 for lib in share/opsh/*.opsh; do
