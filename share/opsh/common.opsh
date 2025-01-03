@@ -114,3 +114,9 @@ array::join() {
     shift
     echo "$*"
 }
+
+opsh::version() {
+    lib::import git
+
+    git::repo::version
+}
