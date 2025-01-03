@@ -1,7 +1,7 @@
 PREFIX		?=	/usr/local
 INSTALLDIR	=	${DESTDIR}${PREFIX}
 
-ALL_SCRIPTS	=	share/opsh/*.opsh bin/opsh make-release make-single-file t/*.{t,opsh}
+ALL_SCRIPTS	=	share/opsh/*.opsh bin/opsh make-release make-single-file t/*.{t,opsh} .githooks/pre-{commit,push}
 
 SHFMTFLAGS	=	-i 4
 all:
