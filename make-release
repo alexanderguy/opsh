@@ -16,6 +16,11 @@ for i in bin share; do mkdir -p "${RELEASEDIR}/$i"; done
 cp bin/opsh "${RELEASEDIR}/bin/."
 cp -r share/* "${RELEASEDIR}/share/."
 
+cat <<EOF >"${RELEASEDIR}/share/opsh/common.opsh"
+_OPSH_VERSION="$VERSION"
+EOF
+cat share/opsh/common.opsh >>"${RELEASEDIR}/share/opsh/common.opsh"
+
 log::info "making archive $ARCHIVENAME..."
 (cd "$TMPDIR" && tar cvzf "$RUNDIR/$ARCHIVENAME" "$RELEASENAME")
 
