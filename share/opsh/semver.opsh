@@ -84,6 +84,7 @@ semver::bump() {
     semver::parse "$ver"
 
     local idx count
+    semver::parse "$ver" || return 1
 
     count=${#OPSH_SEMVER[@]}
 
