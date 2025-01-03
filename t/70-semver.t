@@ -10,6 +10,22 @@ verify-basic-parsing() {
     [[ "${OPSH_SEMVER[2]}" -eq 6 ]] || testing::fail
 
     [[ "${#OPSH_SEMVER[@]}" -eq 3 ]] || testing::fail
+
+    semver::parse v2.1.9-11-blahblahblah || testing::fail
+
+    [[ "${OPSH_SEMVER[0]}" -eq 2 ]] || testing::fail
+    [[ "${OPSH_SEMVER[1]}" -eq 1 ]] || testing::fail
+    [[ "${OPSH_SEMVER[2]}" -eq 9 ]] || testing::fail
+    [[ "${OPSH_SEMVER[3]}" = "-11-blahblahblah" ]] || testing::fail
+    [[ "${#OPSH_SEMVER[@]}" -eq 4 ]] || testing::fail
+
+    semver::parse v9.9.9+testing12 || testing::fail
+
+    [[ "${OPSH_SEMVER[0]}" -eq 9 ]] || testing::fail
+    [[ "${OPSH_SEMVER[1]}" -eq 9 ]] || testing::fail
+    [[ "${OPSH_SEMVER[2]}" -eq 9 ]] || testing::fail
+    [[ "${OPSH_SEMVER[3]}" = "+testing12" ]] || testing::fail
+    [[ "${#OPSH_SEMVER[@]}" -eq 4 ]] || testing::fail
 }
 
 testing::register verify-basic-parsing "make sure we can parse a basic semver"
@@ -79,7 +95,7 @@ expr-logical() {
 testing::register expr-logical "check that basic semver expressions logic works"
 
 bad-ver-parsing() {
-    for i in .5 badger v4..1 v4.5. v4. sun badger 00.1.2 0.01.2 0.0.02; do
+    for i in .5 badger v4..1 v4.5. v4. sun badger 00.1.2 0.01.2 0.0.02 v0.9.0- v0.9.0_; do
         if semver::parse "$i"; then
             testing::fail "incorrectly parsed '$i'"
         fi
@@ -106,6 +122,11 @@ basic-bump() {
     new=$(semver::bump patch "$old")
     [[ "$new" = "2.5.10" ]] || testing::fail
     semver::test "$new" -eq v2.5.10 || testing::fail
+
+    old=8.8.3-stuff+trailing
+    new=$(semver::bump patch "$old")
+    [[ "$new" = "8.8.4-stuff+trailing" ]] || testing::fail
+    semver::test "$new" -eq 8.8.4 || testing::fail
 
     if new=$(semver::bump nonsense "6.2.0"); then
         testing::fail
