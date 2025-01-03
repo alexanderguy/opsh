@@ -12,7 +12,9 @@ RELEASEDIR="$TMPDIR/$RELEASENAME"
 mkdir -p "$RELEASEDIR"
 
 log::info "installing to $RELEASENAME..."
-make DESTDIR="$RELEASEDIR" PREFIX="" install
+for i in bin share; do mkdir -p "${RELEASEDIR}/$i"; done
+cp bin/opsh "${RELEASEDIR}/bin/."
+cp -r share/* "${RELEASEDIR}/share/."
 
 log::info "making archive $ARCHIVENAME..."
 (cd "$TMPDIR" && tar cvzf "$RUNDIR/$ARCHIVENAME" "$RELEASENAME")

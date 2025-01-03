@@ -1,5 +1,4 @@
 PREFIX		?=	/usr/local
-INSTALLDIR	=	${DESTDIR}${PREFIX}
 
 ALL_SCRIPTS	=	share/opsh/*.opsh bin/opsh make-release make-single-file t/*.{t,opsh} .githooks/pre-{commit,push}
 
@@ -17,11 +16,6 @@ check: lint test
 
 format:
 	shfmt -w ${SHFMTFLAGS} ${ALL_SCRIPTS}
-
-install:
-	for i in bin share ; do mkdir -p ${INSTALLDIR}/$$i ; done
-	cp bin/opsh ${INSTALLDIR}/bin/.
-	cp -r share/* ${INSTALLDIR}/share/.
 
 release:
 	./bin/opsh ./make-release
