@@ -105,6 +105,7 @@ lib::import() {
 
         # shellcheck disable=SC1090
         source "$libfile"
+        _OPSH_LIB_IMPORTED+=("$libname")
     done
 }
 
