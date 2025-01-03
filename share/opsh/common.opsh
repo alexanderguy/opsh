@@ -1,4 +1,4 @@
-_OPSH_LIB_BUNDLED=()
+_OPSH_LIB_IMPORTED=()
 EXIT_FUNCS=()
 
 exit::trap() {
@@ -79,12 +79,12 @@ log::fatal() {
     exit 1
 }
 
-lib::import::is-bundled() {
+lib::import::is-imported() {
     local libfile i
     libfile=$1
     shift
 
-    for i in "${_OPSH_LIB_BUNDLED[@]}"; do
+    for i in "${_OPSH_LIB_IMPORTED[@]}"; do
         if [[ $libfile == "$i" ]]; then
             return 0
         fi
@@ -96,7 +96,7 @@ lib::import::is-bundled() {
 lib::import() {
     local libfile
     for libname in "$@"; do
-        if lib::import::is-bundled "$libname"; then
+        if lib::import::is-imported "$libname"; then
             continue
         fi
 
