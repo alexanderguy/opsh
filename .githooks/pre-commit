@@ -2,4 +2,14 @@
 
 set -euo pipefail
 
-exec make lint
+TEMPTREE=pre-commit.$$
+
+cleanup() {
+    rm -rf "$TEMPTREE"
+}
+
+trap cleanup EXIT
+
+git checkout-index -a --prefix="./$TEMPTREE/"
+
+(cd "./$TEMPTREE" && make lint)
