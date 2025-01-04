@@ -125,3 +125,15 @@ opsh::version() {
 
     git::repo::version
 }
+
+opsh::version::require() {
+    local minver=$1
+    shift
+
+    local thisver
+    thisver=$(opsh::version) || log::fatal "couldn't retrieve installed opsh version!"
+
+    lib::import semver
+
+    semver::test "$thisver" -ge "$minver" || log::fatal "opsh ($thisver) is older than required ($minver)!"
+}
