@@ -7,7 +7,8 @@ lib::import git
 VERSION=$(git::repo::version)
 RELEASENAME="opsh-$VERSION"
 ARCHIVENAME="$RELEASENAME.tar.gz"
-RELEASEDIR="$TMPDIR/$RELEASENAME"
+: "${RELEASEDIR:=$TMPDIR/$RELEASENAME}"
+: "${BUILD_ARCHIVE:=true}"
 
 mkdir -p "$RELEASEDIR"
 
@@ -21,7 +22,9 @@ _OPSH_VERSION="$VERSION"
 EOF
 cat share/opsh/common.opsh >>"${RELEASEDIR}/share/opsh/common.opsh"
 
-log::info "making archive $ARCHIVENAME..."
-(cd "$TMPDIR" && tar cvzf "$RUNDIR/$ARCHIVENAME" "$RELEASENAME")
+if $BUILD_ARCHIVE; then
+    log::info "making archive $ARCHIVENAME..."
+    (cd "$RELEASEDIR/.." && tar cvzf "$RUNDIR/$ARCHIVENAME" "$RELEASENAME")
+fi
 
 log::info "done making release"
