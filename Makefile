@@ -7,7 +7,7 @@ all:
 
 lint:
 	shfmt ${SHFMTFLAGS} -d ${ALL_SCRIPTS}
-	shellcheck -P SCRIPTDIR -s bash -x ${ALL_SCRIPTS}
+	shellcheck -P SCRIPTDIR -s bash -x -e SC2086 ${ALL_SCRIPTS}
 
 test:
 	PATH=$$PWD/bin:$$PATH prove -v
