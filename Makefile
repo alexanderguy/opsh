@@ -17,6 +17,9 @@ check: lint test
 format:
 	shfmt -w ${SHFMTFLAGS} ${ALL_SCRIPTS}
 
+install:
+	RELEASEDIR="${DESTDIR}${PREFIX}" BUILD_ARCHIVE=false ./bin/opsh ./make-release
+
 release:
 	./bin/opsh ./make-release
 
