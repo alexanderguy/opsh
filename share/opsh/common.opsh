@@ -115,6 +115,16 @@ array::join() {
     echo "$*"
 }
 
+array::split() {
+    local -n name=$1
+    shift
+    local IFS=$1
+    shift
+
+    # shellcheck disable=SC2034,SC2206
+    name=($@)
+}
+
 opsh::version() {
     if [[ -v _OPSH_VERSION ]]; then
         echo "$_OPSH_VERSION"
