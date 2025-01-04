@@ -16,4 +16,4 @@ C () {
 
 exit::trigger C
 
-exit::trigger print-args B
+exit::trigger "print-args B"
