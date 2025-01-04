@@ -27,4 +27,14 @@ EOF
 
 testing::register check-exit-triggers "verify that the exit triggers run properly"
 
+check-required-version() {
+    if $SCRIPTDIR/10-test_invocation/impossible-version-require; then
+        testing::fail "this version requirement should have failed"
+    fi
+
+    opsh::version::require 0.0.0 || testing::fail
+}
+
+testing::register check-required-version "test that version requirements work"
+
 testing::run
