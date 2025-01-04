@@ -2,6 +2,7 @@
 
 #- SECTION 00-header
 set -euo pipefail
+IFS=''
 
 if [ -z "$BASH_VERSION" ]; then
     echo "FATAL: $0 requires bash to function properly!"
