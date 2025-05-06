@@ -16,3 +16,28 @@ git::tag::exists() {
 
     [[ $(git tag -l "$tag") == "$tag" ]] || return 1
 }
+
+git::tag::lookup::remote() {
+    local remote tag tagfile tagcount
+    remote=$1
+    shift
+    tag=$1
+    shift
+
+    tagfile=$(temp::file)
+
+    git ls-remote --tags "$remote" "$tag" >"$tagfile"
+
+    tagcount=$(wc -l <"$tagfile")
+
+    if [[ $tagcount -lt 1 ]]; then
+        return 1
+    fi
+
+    if [[ $tagcount -gt 1 ]]; then
+        return 2
+    fi
+
+    awk '{ print $1;}' <"$tagfile"
+    rm "$tagfile"
+}
