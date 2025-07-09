@@ -1,0 +1,13 @@
+#!/usr/bin/env opsh
+
+lib::import test-harness
+
+this-should-fail() {
+    set -e
+    xxxxthisdoesnotexistasacommand
+    true
+}
+
+testing::register this-should-fail "we should fail"
+
+testing::run

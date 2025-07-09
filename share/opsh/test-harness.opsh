@@ -28,7 +28,17 @@ testing::run() {
     n=1
     for func in "${_TESTING_REGISTERED_FUNCS[@]}"; do
         res=0
-        ("$func") >"$outfile" 2>&1 || res=$?
+        (
+            set -o functrace
+            # shellcheck disable=SC2154
+            trap '{
+                local code=$?
+                if [[ $code != 0 && $BASH_COMMAND != '\''ret=$?'\'' ]] ; then
+                    [[ $FUNCNAME ]] && return $code || exit $code
+                fi
+            }' DEBUG
+            "$func"
+        ) >"$outfile" 2>&1 || res=$?
 
         if [[ $res -ne 0 ]]; then
             echo -n "not "
