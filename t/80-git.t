@@ -12,7 +12,7 @@ verify-remote-tag-lookup() {
     # XXX - This is brittle, but it's a known hash value from a previous release.
     [[ $hash = f9798b9ff4fe4fe84a530a7cabab615baf445431 ]] || test::fail
 
-    eval-and-check-status 1 'git::tag::lookup::remote notreal notatag'
+    eval-and-check-status 128 'git::tag::lookup::remote notreal notatag'
 }
 
 testing::register verify-remote-tag-lookup "check if a basic remote tag lookup works"
