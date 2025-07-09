@@ -1,0 +1,41 @@
+#!/usr/bin/env opsh
+
+lib::import test-harness
+
+explicit-fail() {
+    testing::fail "explicit error"
+    log::error "this shouldn't happen"
+}
+
+testing::register explicit-fail "make sure explicit fail works"
+
+error-and-explicit-fail() {
+    false || testing::fail "explicit fail after error should work"
+    log::error "this shouldn't happen"
+}
+
+testing::register error-and-explicit-fail "make sure explicit fail works after an error"
+
+true-should-fail() {
+    true && testing::fail "this should fail after true"
+    log::error "this shouldn't happen"
+}
+
+testing::register true-should-fail "make sure we fail correctly on an and"
+
+false-should-fail() {
+    false && testing::fail "you shouldn't see this"
+    log::error "this shouldn't happen"
+}
+
+testing::register false-should-fail "make sure we exit on false in an and statement"
+
+allow-catching-ret() {
+    local ret=0
+    false || ret=$?
+    log::info "ret should = 1: $ret"
+}
+
+testing::register allow-catching-ret "we should be able to catch the return value"
+
+testing::run
