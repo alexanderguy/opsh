@@ -1,0 +1,10 @@
+#!/usr/bin/env bash
+
+source opsh
+
+[[ $SCRIPTFILE =~ .*t/10-test_invocation/source-opsh ]] || log::fatal "SCRIPTFILE is incorrect: '$SCRIPTFILE'"
+[[ $SCRIPTDIR =~ .*t/10-test_invocation ]] || log::fatal "SCRIPTDIR is incorrect: '$SCRIPTDIR'"
+
+lib::import git
+
+log::info "goliath online"

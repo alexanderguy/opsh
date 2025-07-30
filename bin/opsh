@@ -24,18 +24,25 @@ OPSHROOTDIR=$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")"/.. &>/dev/null && pwd)
 source "$OPSHROOTDIR/share/opsh/common.opsh"
 
 #- SECTION 20-command
-if [[ $# -lt 1 ]]; then
-    log::fatal "$0 requires a single argument of the script to run!"
+
+if [[ "${BASH_SOURCE[0]}" != "${0}" ]]; then
+    SCRIPTFILE="$BASH_ARGV0"
+    # shellcheck disable=SC2034
+    SCRIPTDIR=$(dirname -- "$SCRIPTFILE")
+else
+    if [[ $# -lt 1 ]]; then
+        log::fatal "$0 requires a single argument of the script to run!"
+    fi
+
+    SCRIPTFILE="$1"
+    shift
+    [[ -f $SCRIPTFILE ]] || log::fatal "$0 can only run normal files that exist!"
+
+    # shellcheck disable=SC2034
+    SCRIPTDIR=$(dirname -- "$SCRIPTFILE")
+
+    BASH_ARGV0=$SCRIPTFILE
+    # shellcheck disable=SC1090
+    source "$SCRIPTFILE"
 fi
-
-SCRIPTFILE="$1"
-shift
-[[ -f $SCRIPTFILE ]] || log::fatal "$0 can only run normal files that exist!"
-
-# shellcheck disable=SC2034
-SCRIPTDIR=$(dirname -- "$SCRIPTFILE")
-
-BASH_ARGV0=$SCRIPTFILE
-# shellcheck disable=SC1090
-source "$SCRIPTFILE"
 #- SECTION 30-end
