@@ -7,6 +7,15 @@ invoke-and-check-output() {
     diff -u - "$outfile"
 }
 
+eval-and-check-output() {
+    local outfile
+    outfile=$(temp::file)
+
+    eval "$*" >"$outfile"
+
+    diff -u - "$outfile"
+}
+
 eval-and-check-status() {
     local expected=$1
     shift
