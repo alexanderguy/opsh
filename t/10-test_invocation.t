@@ -37,4 +37,12 @@ check-required-version() {
 
 testing::register check-required-version "test that version requirements work"
 
+check-source-works() {
+    eval-and-check-output "$SCRIPTDIR/10-test_invocation/source-opsh 2>&1" <<EOF
+INFO:	goliath online
+EOF
+}
+
+testing::register check-source-works "test that opsh can be sourced into an existing shell"
+
 testing::run
