@@ -17,6 +17,19 @@ testing::register() {
     fi
 }
 
+testing::_should-bail() {
+    local code=$1
+    shift
+    local next=$1
+    shift
+
+    if [[ $code != 0 && $next != "ret=\$?" ]]; then
+        return 0
+    fi
+
+    return 1
+}
+
 testing::run() {
     echo "TAP version 13"
     echo "1..${#_TESTING_REGISTERED_FUNCS[@]}"
@@ -33,7 +46,7 @@ testing::run() {
             # shellcheck disable=SC2154
             trap '{
                 local code=$?
-                if [[ $code != 0 && $BASH_COMMAND != '\''ret=$?'\'' ]] ; then
+                if testing::_should-bail "$code" "$BASH_COMMAND" ; then
                     [[ $FUNCNAME ]] && return $code || exit $code
                 fi
             }' DEBUG
