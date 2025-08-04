@@ -2,7 +2,8 @@ export _OPSH_SSH_CONTEXT
 
 ssh::end() {
     [[ -v _OPSH_SSH_CONTEXT ]] || return 0
-    eval "$(cat "$_OPSH_SSH_CONTEXT/env")"
+    # shellcheck disable=SC1091 # we assume this is well formed at runtime
+    source "$_OPSH_SSH_CONTEXT/env"
     eval "$(ssh-agent -k | grep -v echo)"
     unset _OPSH_SSH_CONTEXT
 }
@@ -13,7 +14,8 @@ ssh::begin() {
 
     log::debug "launching local SSH agent..."
     ssh-agent | grep -v echo >"$_OPSH_SSH_CONTEXT/env" 2>/dev/null
-    eval "$(cat "$_OPSH_SSH_CONTEXT/env")"
+    # shellcheck disable=SC1091 # we assume this is well formed at runtime
+    source "$_OPSH_SSH_CONTEXT/env"
 
     exit::trigger ssh::end
 }
