@@ -27,6 +27,14 @@ testing::_should-bail() {
         return 1
     fi
 
+    # In the case where the previous next was the function we just entered,
+    # ignore failures, since nothing has gotten the chance to run yet.
+    if [[ $_OPSH_TESTING_PREV_NEXT == ${FUNCNAME[1]}* ]]; then
+        return 1
+    fi
+
+    _OPSH_TESTING_PREV_NEXT="$next"
+
     case "$next" in
     ret=\$?)
         return 1
@@ -49,6 +57,7 @@ testing::run() {
     for func in "${_TESTING_REGISTERED_FUNCS[@]}"; do
         res=0
         (
+            _OPSH_TESTING_PREV_NEXT=""
             set -o functrace
             # shellcheck disable=SC2154
             trap '{
