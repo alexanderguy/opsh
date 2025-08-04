@@ -1,0 +1,12 @@
+path::env::add() {
+    PATH=$(array::join : "$@"):$PATH
+}
+
+path::env::remove() {
+    local dir
+    dir=$1
+    shift
+
+    # XXX - This is not as sophisticated as it could be, but that's probably alright.
+    PATH=$(echo -n "$PATH" | awk -v RS=: -v ORS=: "\$0 == \"$dir\" {next} {print}" | sed 's/:$//;')
+}
