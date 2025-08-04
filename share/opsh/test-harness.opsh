@@ -39,6 +39,12 @@ testing::_should-bail() {
     ret=\$?)
         return 1
         ;;
+    return*)
+        return 1
+        ;;
+    testing::fail\ *)
+        return 1
+        ;;
     *)
         return 0
         ;;
