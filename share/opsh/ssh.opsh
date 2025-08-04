@@ -1,7 +1,11 @@
+lib::import path
+
 export _OPSH_SSH_CONTEXT
 
 ssh::end() {
     [[ -v _OPSH_SSH_CONTEXT ]] || return 0
+    path::env::remove "$_OPSH_SSH_CONTEXT/bin"
+
     # shellcheck disable=SC1091 # we assume this is well formed at runtime
     source "$_OPSH_SSH_CONTEXT/env"
     eval "$(ssh-agent -k | grep -v echo)"
@@ -9,6 +13,11 @@ ssh::end() {
 }
 
 ssh::begin() {
+    local realssh
+
+    # shellcheck disable=SC2034 # it's used in the proxy below
+    realssh=$(command -v ssh)
+
     _OPSH_SSH_CONTEXT=$(temp::dir)
     chmod 700 "$_OPSH_SSH_CONTEXT"
 
@@ -16,6 +25,16 @@ ssh::begin() {
     ssh-agent | grep -v echo >"$_OPSH_SSH_CONTEXT/env" 2>/dev/null
     # shellcheck disable=SC1091 # we assume this is well formed at runtime
     source "$_OPSH_SSH_CONTEXT/env"
+
+    mkdir -p "$_OPSH_SSH_CONTEXT/bin"
+    cat >"$_OPSH_SSH_CONTEXT/bin/ssh" <<EOF
+#!/usr/bin/env opsh
+[[ -v _OPSH_SSH_CONTEXT ]] || log::fatal "proxied ssh being run outside of opsh ssh context; this is a bug"
+
+exec $realssh -F "\$_OPSH_SSH_CONTEXT/config" "\$@"
+EOF
+    chmod 755 "$_OPSH_SSH_CONTEXT/bin/ssh"
+    path::env::add "$_OPSH_SSH_CONTEXT/bin"
 
     exit::trigger ssh::end
 }
